@@ -1,9 +1,6 @@
 // Make connection
 var socket = io.connect('http://localhost:8000');
 
-socket.on('noti', function (data) {
-  alert(data);
-});
 
 // Query DOM
 var message = document.getElementById('message'),
