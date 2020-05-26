@@ -1,5 +1,5 @@
 // Make connection
-var socket = io.connect('https://infinite-hollows-05315.herokuapp.com/');
+var socket = io.connect('http://localhost:8000');
 
 
 // Query DOM
