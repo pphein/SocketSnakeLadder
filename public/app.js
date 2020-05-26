@@ -1,5 +1,5 @@
 // Make connection
-var socket = io.connect('https://socketslgame.herokuapp.com/');
+var socket = io.connect('http://localhost:8000');
 
 
 // Query DOM

@@ -1,12 +1,11 @@
 var express = require('express');
 var socket = require('socket.io');
-
-
+var PORT = 8000;
 
 // App setup
-var app = require('https').createServer(app);
-var server = app.listen(8000, function(){
-    console.log('listening for requests on https://socketslgame.herokuapp.com/');
+var app = express();
+var server = app.listen(PORT, function(){
+    console.log('listening for requests on http://localhost:8000');
 });
 
 // Static files
