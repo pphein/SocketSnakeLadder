@@ -1,6 +1,6 @@
 var express = require('express');
 var socket = require('socket.io');
-var PORT = 8000;
+var PORT = process.env.PORT || 8000;
 
 // App setup
 var app = express();
