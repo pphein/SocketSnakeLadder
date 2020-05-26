@@ -3,8 +3,8 @@ var socket = require('socket.io');
 
 // App setup
 var app = express();
-var server = app.listen(8000, function(){
-    console.log('listening for requests on http://localhost:8000');
+var server = app.listen('https://socketslgame.herokuapp.com/', function(){
+    console.log('listening for requests on https://socketslgame.herokuapp.com/');
 });
 
 // Static files
