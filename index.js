@@ -1,9 +1,11 @@
 var express = require('express');
 var socket = require('socket.io');
 
+
+
 // App setup
-var app = express();
-var server = app.listen('https://socketslgame.herokuapp.com/', function(){
+var app = require('https').createServer(app);
+var server = app.listen(8000, function(){
     console.log('listening for requests on https://socketslgame.herokuapp.com/');
 });
 
