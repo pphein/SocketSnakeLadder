@@ -60,7 +60,6 @@ input{
 }
 
 
-
 button {
   text-transform: uppercase;
   font-size: 0.8rem;
@@ -80,9 +79,6 @@ button {
 button:hover {
     background-color: #79d7e4;
 }
-
-
-
 
 /*Test*/
 div.main{
@@ -108,36 +104,21 @@ table {
     text-align: center;
 }
 
-
-
-
 div.board {
   width: 50em;
   margin-top: 2em;
   display: block;
-
 }
 
-
-
-
 div.row-even{
-  margin-left: 2em;
-    
-    float: left;
-
-  
-   
+    margin-left: 2em;    
+    float: left;  
 }
 
 div.row-odd{
-  margin-left: 2em;
-
+    margin-left: 2em;
     float: left;
-  
-   
 }
-
 
 div.row-0, .row-2, .row-4, .row-6, .row-8{
   width: 1.5em;
@@ -148,8 +129,6 @@ div.row-0, .row-2, .row-4, .row-6, .row-8{
   text-align: center;
   line-height: 1.5em;
   clear: right;
-
-
 }
 
 div.row-1, .row-3, .row-5, .row-7, .row-9{
@@ -161,10 +140,7 @@ div.row-1, .row-3, .row-5, .row-7, .row-9{
   text-align: center;
   line-height: 1.5em;
   clear: left;
-
-
 }
-
 
 .odd {
   color: grey;
@@ -175,8 +151,6 @@ div.row-1, .row-3, .row-5, .row-7, .row-9{
   color: white;
   background-color: #b9b5b5;
 }
-
-
 
 .snake1 {
     position: absolute;
@@ -216,7 +190,6 @@ div.row-1, .row-3, .row-5, .row-7, .row-9{
     box-shadow: 0px 10px 60px rgba(0, 0, 0, 0);
    }
 
-
 .snake5 {
     position: absolute;
     left: 28em;
@@ -252,7 +225,6 @@ div.row-1, .row-3, .row-5, .row-7, .row-9{
     height: 73px;
     box-shadow: 0px 10px 60px rgba(0, 0, 0, 0);
 }
-
 
 .ladder5 {
 
@@ -301,14 +273,10 @@ div.row-1, .row-3, .row-5, .row-7, .row-9{
     box-shadow: 0px 10px 60px rgba(0, 0, 0, 0);
 }
 
-
-
 img.die{
     width: 5em;
     box-shadow: 0px 10px 60px rgba(0, 0, 0, 0.1);
-
     animation: rotation 2s infinite linear;
-
 }
 @keyframes rotation {
   from {
@@ -318,5 +286,3 @@ img.die{
     transform: rotate(359deg);
   }
 }
-
-
