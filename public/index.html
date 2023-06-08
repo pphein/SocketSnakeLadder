@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>WebScockets Game</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+    <link href="/styles.css" rel="stylesheet" />
+</head>
+
+<body>
+
+    <div class="main">
+        <div class="board">
+            <img src="snake1.png" class="img snake8">
+            <img src="snake2.png" class="img snake7">
+            <img src="snake5.png" class="img snake6">
+            <img src="snake5.png" class="img snake5">
+            <img src="snake4.png" class="img snake4">
+            <img src="snake3.png" class="img snake3">
+            <img src="snake2.png" class="img snake2">
+            <img src="snake1.png" class="img snake1">
+            <img src="ladder2.png" class="img ladder5">
+            <img src="ladder4.png" class="img ladder4">
+            <img src="ladder3.png" class="img ladder3">
+            <img src="ladder2.png" class="img ladder2">
+            <img src="ladder3.png" class="img ladder1">
+            <audio id="ladder">
+        <source src="ladder.wav">
+      </audio>
+            <audio id="snake">
+        <source src="snake.wav">
+      </audio>
+            <audio id="winner">
+        <source src="winner.wav">
+      </audio>
+
+            <div class="row-odd">
+                <div class="row-9 odd" id="cell-91">91</div>
+                <div class="row-9 even" id="cell-92">92</div>
+                <div class="row-9 odd" id="cell-93">93</div>
+                <div class="row-9 even" id="cell-94">94</div>
+                <div class="row-9 odd" id="cell-95">95</div>
+                <div class="row-9 even" id="cell-96">96</div>
+                <div class="row-9 odd" id="cell-97">97</div>
+                <div class="row-9 even" id="cell-98">98</div>
+                <div class="row-9 odd" id="cell-99">99</div>
+                <div class="row-9 even" id="cell-100">F</div>
+            </div>
+
+            <div class="row-even">
+                <div class="row-8 odd" id="cell-81">81</div>
+                <div class="row-8 even" id="cell-82">82</div>
+                <div class="row-8 odd" id="cell-83">83</div>
+                <div class="row-8 even" id="cell-84">84</div>
+                <div class="row-8 odd" id="cell-85">85</div>
+                <div class="row-8 even" id="cell-86">86</div>
+                <div class="row-8 odd" id="cell-87">87</div>
+                <div class="row-8 even" id="cell-88">88</div>
+                <div class="row-8 odd" id="cell-89">89</div>
+                <div class="row-8 even" id="cell-90">90</div>
+            </div>
+
+            <div class="row-odd">
+                <div class="row-7 odd" id="cell-71">71</div>
+                <div class="row-7 even" id="cell-72">72</div>
+                <div class="row-7 odd" id="cell-73">73</div>
+                <div class="row-7 even" id="cell-74">74</div>
+                <div class="row-7 odd" id="cell-75">75</div>
+                <div class="row-7 even" id="cell-76">76</div>
+                <div class="row-7 odd" id="cell-77">77</div>
+                <div class="row-7 even" id="cell-78">78</div>
+                <div class="row-7 odd" id="cell-79">79</div>
+                <div class="row-7 even" id="cell-80">80</div>
+            </div>
+
+            <div class="row-even">
+                <div class="row-6 odd" id="cell-61">61</div>
+                <div class="row-6 even" id="cell-62">62</div>
+                <div class="row-6 odd" id="cell-63">63</div>
+                <div class="row-6 even" id="cell-64">64</div>
+                <div class="row-6 odd" id="cell-65">65</div>
+                <div class="row-6 even" id="cell-66">66</div>
+                <div class="row-6 odd" id="cell-67">67</div>
+                <div class="row-6 even" id="cell-68">68</div>
+                <div class="row-6 odd" id="cell-69">69</div>
+                <div class="row-6 even" id="cell-70">70</div>
+            </div>
+
+            <div class="row-odd">
+                <div class="row-5 odd" id="cell-51">51</div>
+                <div class="row-5 even" id="cell-52">52</div>
+                <div class="row-5 odd" id="cell-53">53</div>
+                <div class="row-5 even" id="cell-54">54</div>
+                <div class="row-5 odd" id="cell-55">55</div>
+                <div class="row-5 even" id="cell-56">56</div>
+                <div class="row-5 odd" id="cell-57">57</div>
+                <div class="row-5 even" id="cell-58">58</div>
+                <div class="row-5 odd" id="cell-59">59</div>
+                <div class="row-5 even" id="cell-60">60</div>
+            </div>
+
+            <div class="row-even">
+                <div class="row-4 odd" id="cell-41">41</div>
+                <div class="row-4 even" id="cell-42">42</div>
+                <div class="row-4 odd" id="cell-43">43</div>
+                <div class="row-4 even" id="cell-44">44</div>
+                <div class="row-4 odd" id="cell-45">45</div>
+                <div class="row-4 even" id="cell-46">46</div>
+                <div class="row-4 odd" id="cell-47">47</div>
+                <div class="row-4 even" id="cell-48">48</div>
+                <div class="row-4 odd" id="cell-49">49</div>
+                <div class="row-4 even" id="cell-50">50</div>
+            </div>
+
+            <div class="row-odd">
+                <div class="row-3 odd" id="cell-31">31</div>
+                <div class="row-3 even" id="cell-32">32</div>
+                <div class="row-3 odd" id="cell-33">33</div>
+                <div class="row-3 even" id="cell-34">34</div>
+                <div class="row-3 odd" id="cell-35">35</div>
+                <div class="row-3 even" id="cell-36">36</div>
+                <div class="row-3 odd" id="cell-37">37</div>
+                <div class="row-3 even" id="cell-38">38</div>
+                <div class="row-3 odd" id="cell-39">39</div>
+                <div class="row-3 even" id="cell-40">40</div>
+            </div>
+
+            <div class="row-even">
+                <div class="row-2 odd" id="cell-21">21</div>
+                <div class="row-2 even" id="cell-22">22</div>
+                <div class="row-2 odd" id="cell-23">23</div>
+                <div class="row-2 even" id="cell-24">24</div>
+                <div class="row-2 odd" id="cell-25">25</div>
+                <div class="row-2 even" id="cell-26">26</div>
+                <div class="row-2 odd" id="cell-27">27</div>
+                <div class="row-2 even" id="cell-28">28</div>
+                <div class="row-2 odd" id="cell-29">29</div>
+                <div class="row-2 even" id="cell-30">30</div>
+            </div>
+
+            <div class="row-odd">
+                <div class="row-1 odd" id="cell-11">11</div>
+                <div class="row-1 even" id="cell-12">12</div>
+                <div class="row-1 odd" id="cell-13">13</div>
+                <div class="row-1 even" id="cell-14">14</div>
+                <div class="row-1 odd" id="cell-15">15</div>
+                <div class="row-1 even" id="cell-16">16</div>
+                <div class="row-1 odd" id="cell-17">17</div>
+                <div class="row-1 even" id="cell-18">18</div>
+                <div class="row-1 odd" id="cell-19">19</div>
+                <div class="row-1 even" id="cell-20">20</div>
+            </div>
+
+            <div class="row-even">
+                <div class="row-0 odd" id="cell-1">S-1</div>
+                <div class="row-0 even" id="cell-2">2</div>
+                <div class="row-0 odd" id="cell-3">3</div>
+                <div class="row-0 even" id="cell-4">4</div>
+                <div class="row-0 odd" id="cell-5">5</div>
+                <div class="row-0 even" id="cell-6">6</div>
+                <div class="row-0 odd" id="cell-7">7</div>
+                <div class="row-0 even" id="cell-8">8</div>
+                <div class="row-0 odd" id="cell-9">9</div>
+                <div class="row-0 even" id="cell-10">10</div>
+            </div>
+        </div>
+
+        <div class="side-bar">
+            <h1>Welcome To my Game</h3>
+                <table border="1">
+                    <tr>
+                        <th colspan="4">Enjoy With Game</th>
+                    </tr>
+                    <tr>
+                        <th>Name</th>
+                        <th>Score</th>
+                        <th>Color</th>
+                        <th>Status</th>
+                    </tr>
+                    <tr>
+                        <td class="player-name" id="name-0">User 1</td>
+                        <td class="player-score" id="score-0">0</td>
+                        <td class="player-color" id="color-0">Blue</td>
+                        <td class="status-0"></td>
+                    </tr>
+                    <tr>
+                        <td class="player-name" id="name-1">User 2</td>
+                        <td class="player-score" id="score-1">0</td>
+                        <td class="player-color" id="color-1">Red</td>
+                        <td class="status-1"></td>
+                    </tr>
+                </table>
+                <br>
+                <br>
+                <button class="roll-die" id="roll"><img class="die" id="diephoto" src="dice-1.png"></button>
+                <br><br>
+                <button class="restart-btn" id="restart">Restart</button>
+
+                <div id="chat">
+                    <h2>Chat</h2>
+                    <div id="chat-window">
+                        <div id="output"></div>
+                        <div id="feedback"></div>
+                    </div>
+                    <input id="handle" type="text" placeholder="Handle" />
+                    <input id="message" type="text" placeholder="Message" />
+                    <button id="send">Send</button>
+                </div>
+        </div>
+    </div>
+
+
+
+
+</body>
+<script src="/app.js"></script>
+
+</html>
