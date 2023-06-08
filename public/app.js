@@ -1,5 +1,5 @@
 // Make connection
-var socket = io.connect('http://localhost:8000');
+var socket = io.connect('https://snake-ladder-socket.onrender.com/');
 
 // Query DOM
 var message = document.getElementById('message'),
@@ -23,8 +23,8 @@ die = document.getElementById('diephoto');
 restart = document.getElementById('restart');
 
 // Emit events   
-button.addEventListener('click', function() {
-    socket.on('id', function(data) {
+button.addEventListener('click', function () {
+    socket.on('id', function (data) {
         activePlayer = data;
     });
     if (activePlayer === 0) {
@@ -164,11 +164,11 @@ button.addEventListener('click', function() {
     }
 });
 
-restart.addEventListener('click', function() {
+restart.addEventListener('click', function () {
     socket.emit('restart');
 });
 
-btn.addEventListener('click', function() {
+btn.addEventListener('click', function () {
     socket.emit('chat', {
         message: message.value,
         handle: handle.value
@@ -176,37 +176,37 @@ btn.addEventListener('click', function() {
     message.value = "";
 });
 
-message.addEventListener('keypress', function() {
+message.addEventListener('keypress', function () {
     socket.emit('typing', handle.value);
 });
 
 // Listen for events
-socket.on('chat', function(data) {
+socket.on('chat', function (data) {
     feedback.innerHTML = '';
     output.innerHTML += '<p><strong>' + data.handle + ': </strong>' + data.message + '</p>';
 });
 
-socket.on('typing', function(data) {
+socket.on('typing', function (data) {
     feedback.innerHTML = '<p><em>' + data + ' is typing a message...</em></p>';
 });
 
-socket.on('dieScore', function(data) {
+socket.on('dieScore', function (data) {
     die.src = 'dice-' + data + '.png';
 });
 
-socket.on('scoreOne', function(data) {
+socket.on('scoreOne', function (data) {
     document.querySelector('#cell-' + data).style.backgroundColor = 'blue';
     showOneScore.innerHTML = data;
     scoreOne = data;
 });
 
-socket.on('scoreTwo', function(data) {
+socket.on('scoreTwo', function (data) {
     document.querySelector('#cell-' + data).style.backgroundColor = 'red';
     showTwoScore.innerHTML = data;
     scoreTwo = data;
 });
 
-socket.on('id', function(data) {
+socket.on('id', function (data) {
     activePlayer = data;
     if (data === 0) {
         document.querySelector('.status-' + data).textContent = '*';
@@ -221,21 +221,21 @@ socket.on('id', function(data) {
     }
 });
 
-socket.on('lastScoreOne', function(data) {
+socket.on('lastScoreOne', function (data) {
     document.querySelector('#cell-' + data).style.backgroundColor = '';
 });
 
-socket.on('lastScoreTwo', function(data) {
+socket.on('lastScoreTwo', function (data) {
     document.querySelector('#cell-' + data).style.backgroundColor = '';
 });
 
-socket.on('noti', function(data) {
+socket.on('noti', function (data) {
     document.querySelector('#cell-' + data).style.backgroundColor = 'green';
     alert(' Result is ' + data + ' Game over!');
     window.location.reload(true);
 });
 
-socket.on('restart', function() {
+socket.on('restart', function () {
     alert('Restart');
     window.location.reload(true);
 });
