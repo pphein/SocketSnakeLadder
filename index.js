@@ -4,13 +4,8 @@ var PORT = process.env.PORT || 8000;
 
 // App setup
 var app = express();
-<<<<<<< HEAD
 var server = app.listen(PORT, function(){
     console.log('listening for requests on http://localhost:8000');
-=======
-var server = app.listen(80, function () {
-    console.log('listening for requests on port 80, https://snake-ladder-socket.onrender.com/');
->>>>>>> 7030af72dcb41c2af8260ae76c07889cfed27b19
 });
 
 // Static files
