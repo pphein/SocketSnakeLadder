@@ -29,8 +29,12 @@ var activePlayer, userOne, userTwo, scoreOne, scoreTwo, dieScoreOne, dieScoreTwo
 
 // Emit events   
 
-button.addEventListener('click', function() {       
-  
+button.addEventListener('click', function() {
+  die.classList.remove('rolling');
+  void die.offsetWidth; // reflow to restart animation
+  die.classList.add('rolling');
+  setTimeout(function() { die.classList.remove('rolling'); }, 500);
+
   socket.on('id', function(data) {
     activePlayer = data;
   });
@@ -265,17 +269,16 @@ socket.on('scoreTwo', function(data) {
 socket.on('id', function(data){
     activePlayer = data;
     if( data === 0){
-        document.querySelector('.status-' + data).textContent = '*';
-        document.querySelector('.status-1').textContent = '';
-        document.querySelector('.status-' + data).style.backgroundColor = 'blue';
-        document.querySelector('.status-1').style.backgroundColor = '';
+        document.querySelector('.status-0').style.backgroundColor = '#2563eb';
+        document.querySelector('.status-0').style.boxShadow = '0 0 0 3px rgba(37,99,235,0.3)';
+        document.querySelector('.status-1').style.backgroundColor = '#e5e7eb';
+        document.querySelector('.status-1').style.boxShadow = 'none';
       }else{
-       document.querySelector('.status-' + data).textContent = '*';
-       document.querySelector('.status-0').textContent = '';
-       document.querySelector('.status-' + data).style.backgroundColor = 'red';
-        document.querySelector('.status-0').style.backgroundColor = '';
+        document.querySelector('.status-1').style.backgroundColor = '#dc2626';
+        document.querySelector('.status-1').style.boxShadow = '0 0 0 3px rgba(220,38,38,0.3)';
+        document.querySelector('.status-0').style.backgroundColor = '#e5e7eb';
+        document.querySelector('.status-0').style.boxShadow = 'none';
       }
-  
     });
 
 socket.on( 'lastScoreOne',function(data){document.querySelector('#cell-'+ data).style.backgroundColor = '';

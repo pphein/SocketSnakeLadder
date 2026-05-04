@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>WebScockets Game</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Snakes &amp; Ladders</title>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
         <script src="/socket.io/socket.io.js"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
         <link href="/styles.css" rel="stylesheet" />
     </head>
     <body>
@@ -13,35 +17,23 @@
     <div class="board">
 
       <img src="snake1.png" class="img snake8">
-
       <img src="snake2.png" class="img snake7">
-
       <img src="snake5.png" class="img snake6">
-
       <img src="snake5.png" class="img snake5">
-
       <img src="snake4.png" class="img snake4">
-
       <img src="snake3.png" class="img snake3">
-
       <img src="snake2.png" class="img snake2">
-
       <img src="snake1.png" class="img snake1">
 
       <img src="ladder2.png" class="img ladder5">
-
       <img src="ladder4.png" class="img ladder4">
-
       <img src="ladder3.png" class="img ladder3">
-
       <img src="ladder2.png" class="img ladder2">
-
       <img src="ladder3.png" class="img ladder1">
 
       <audio id="ladder"><source src="ladder.wav"></audio>
       <audio id="snake"><source src="snake.wav"></audio>
       <audio id="winner"><source src="winner.wav"></audio>
-
 
       <div class="row-odd">
         <div class="row-9 odd" id="cell-91">91</div>
@@ -53,9 +45,9 @@
         <div class="row-9 odd" id="cell-97">97</div>
         <div class="row-9 even" id="cell-98">98</div>
         <div class="row-9 odd" id="cell-99">99</div>
-        <div class="row-9 even" id="cell-100">F</div>     
+        <div class="row-9 even" id="cell-100">F</div>
       </div>
-      
+
       <div class="row-even">
         <div class="row-8 odd" id="cell-81">81</div>
         <div class="row-8 even" id="cell-82">82</div>
@@ -79,12 +71,12 @@
         <div class="row-7 odd" id="cell-77">77</div>
         <div class="row-7 even" id="cell-78">78</div>
         <div class="row-7 odd" id="cell-79">79</div>
-        <div class="row-7 even" id="cell-80">80</div>     
+        <div class="row-7 even" id="cell-80">80</div>
       </div>
 
       <div class="row-even">
         <div class="row-6 odd" id="cell-61">61</div>
-        <div class="row-6 even"  id="cell-62">62</div>
+        <div class="row-6 even" id="cell-62">62</div>
         <div class="row-6 odd" id="cell-63">63</div>
         <div class="row-6 even" id="cell-64">64</div>
         <div class="row-6 odd" id="cell-65">65</div>
@@ -102,10 +94,10 @@
         <div class="row-5 even" id="cell-54">54</div>
         <div class="row-5 odd" id="cell-55">55</div>
         <div class="row-5 even" id="cell-56">56</div>
-        <div class="row-5 odd" id="cell-57" id="cell-5">57</div>
+        <div class="row-5 odd" id="cell-57">57</div>
         <div class="row-5 even" id="cell-58">58</div>
         <div class="row-5 odd" id="cell-59">59</div>
-        <div class="row-5 even" id="cell-60">60</div>     
+        <div class="row-5 even" id="cell-60">60</div>
       </div>
 
       <div class="row-even">
@@ -122,16 +114,16 @@
       </div>
 
       <div class="row-odd">
-        <div class="row-3 odd" id="cell-31" >31</div>
-        <div class="row-3 even"  id="cell-32">32</div>
-        <div class="row-3 odd"  id="cell-33">33</div>
-        <div class="row-3 even"  id="cell-34">34</div>
-        <div class="row-3 odd"  id="cell-35">35</div>
-        <div class="row-3 even"  id="cell-36">36</div>
-        <div class="row-3 odd"  id="cell-37">37</div>
-        <div class="row-3 even"  id="cell-38">38</div>
-        <div class="row-3 odd"  id="cell-39">39</div>
-        <div class="row-3 even"  id="cell-40">40</div>      
+        <div class="row-3 odd" id="cell-31">31</div>
+        <div class="row-3 even" id="cell-32">32</div>
+        <div class="row-3 odd" id="cell-33">33</div>
+        <div class="row-3 even" id="cell-34">34</div>
+        <div class="row-3 odd" id="cell-35">35</div>
+        <div class="row-3 even" id="cell-36">36</div>
+        <div class="row-3 odd" id="cell-37">37</div>
+        <div class="row-3 even" id="cell-38">38</div>
+        <div class="row-3 odd" id="cell-39">39</div>
+        <div class="row-3 even" id="cell-40">40</div>
       </div>
 
       <div class="row-even">
@@ -157,11 +149,11 @@
         <div class="row-1 odd" id="cell-17">17</div>
         <div class="row-1 even" id="cell-18">18</div>
         <div class="row-1 odd" id="cell-19">19</div>
-        <div class="row-1 even" id="cell-20">20</div>     
+        <div class="row-1 even" id="cell-20">20</div>
       </div>
 
       <div class="row-even">
-        <div class="row-0 odd" id="cell-1">S-1</div>
+        <div class="row-0 odd" id="cell-1">S</div>
         <div class="row-0 even" id="cell-2">2</div>
         <div class="row-0 odd" id="cell-3">3</div>
         <div class="row-0 even" id="cell-4">4</div>
@@ -170,66 +162,61 @@
         <div class="row-0 odd" id="cell-7">7</div>
         <div class="row-0 even" id="cell-8">8</div>
         <div class="row-0 odd" id="cell-9">9</div>
-        <div class="row-0 even" id="cell-10">10</div>     
+        <div class="row-0 even" id="cell-10">10</div>
       </div>
 
     </div>
 
     <div class="side-bar">
-      
-      <h1>Welcome To my Game</h3>
-      
 
-      <table border="1">
-        
-        
-        <tr>
-          <th colspan="4">Enjoy With Game</th>
-        </tr>
-        <tr>
-          <th>Name</th>
-          <th>Score</th>
-          <th>Color</th>
-          <th>Status</th>
-        </tr>
-        <tr>
-          <td class="player-name" id="name-0">User 1</td>
-          <td class="player-score" id="score-0">0</td>
-          <td class="player-color" id="color-0">Blue</td>
-          <td class="status-0"></td>
-        </tr>
-        <tr>
-          <td class="player-name" id="name-1">User 2</td>
-          <td class="player-score" id="score-1">0</td>
-          <td class="player-color" id="color-1">Red</td>
-          <td class="status-1"></td>
-        </tr>
+      <h1>Snakes &amp; Ladders<span>Multiplayer</span></h1>
+
+      <table>
+        <thead>
+          <tr>
+            <th colspan="4">Players</th>
+          </tr>
+          <tr>
+            <th>Name</th>
+            <th>Score</th>
+            <th>Color</th>
+            <th>Turn</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="player-name" id="name-0">Player 1</td>
+            <td class="player-score" id="score-0">0</td>
+            <td class="player-color" id="color-0">Blue</td>
+            <td><div class="status-0"></div></td>
+          </tr>
+          <tr>
+            <td class="player-name" id="name-1">Player 2</td>
+            <td class="player-score" id="score-1">0</td>
+            <td class="player-color" id="color-1">Red</td>
+            <td><div class="status-1"></div></td>
+          </tr>
+        </tbody>
       </table>
 
-      <br>
-      <br>
+      <hr class="divider">
 
-      
-        <button class="roll-die" id="roll"><img class="die" id="diephoto" src="dice-1.png"></button>
-        <br><br>
-        <button class="restart-btn" id="restart">Restart</button>
+      <button class="roll-die" id="roll"><img class="die" id="diephoto" src="dice-1.png"></button>
+      <button class="restart-btn" id="restart">Restart Game</button>
 
-        <div id="chat">
-            <h2>Chat</h2>
-            <div id="chat-window">
-                <div id="output"></div>
-                <div id="feedback"></div>
-            </div>
-            <input id="handle" type="text" placeholder="Handle" />
-            <input id="message" type="text" placeholder="Message" />
-            <button id="send">Send</button>
-        </div>
-        
+      <div id="chat">
+          <h2>Live Chat</h2>
+          <div id="chat-window">
+              <div id="output"></div>
+              <div id="feedback"></div>
+          </div>
+          <input id="handle" type="text" placeholder="Your name" />
+          <input id="message" type="text" placeholder="Type a message..." />
+          <button id="send">Send</button>
+      </div>
+
     </div>
   </div>
-
-        
-
 
     </body>
     <script src="/app.js"></script>
