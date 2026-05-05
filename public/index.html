@@ -1,229 +1,338 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Snakes &amp; Ladders</title>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
-        <script src="/socket.io/socket.io.js"></script>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-        <link href="/styles.css" rel="stylesheet" />
-    </head>
-    <body>
-
 <head>
     <meta charset="utf-8">
-    <title>WebScockets Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snakes &amp; Ladders</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
-    <link href="/styles.css" rel="stylesheet" />
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="/styles.css" rel="stylesheet">
 </head>
+<body>
 
-      <img src="snake1.png" class="img snake8">
-      <img src="snake2.png" class="img snake7">
-      <img src="snake5.png" class="img snake6">
-      <img src="snake5.png" class="img snake5">
-      <img src="snake4.png" class="img snake4">
-      <img src="snake3.png" class="img snake3">
-      <img src="snake2.png" class="img snake2">
-      <img src="snake1.png" class="img snake1">
+<div class="main">
 
-      <img src="ladder2.png" class="img ladder5">
-      <img src="ladder4.png" class="img ladder4">
-      <img src="ladder3.png" class="img ladder3">
-      <img src="ladder2.png" class="img ladder2">
-      <img src="ladder3.png" class="img ladder1">
+  <!-- ===== BOARD ===== -->
+  <div class="board-wrapper">
+    <div class="board">
+
+      <!-- SVG overlay: snakes (red) and ladders (gold) -->
+      <!-- Coordinates use viewBox 0 0 100 100 matching the 10×10 grid.
+           Each cell centre = (col+0.5)*10 , (gridRow+0.5)*10
+           where gridRow 0 = top row (91-100), gridRow 9 = bottom row (1-10).
+           Ladders: 2→23, 10→30, 28→48, 59→78, 74→88
+           Snakes:  16→7,  43→38, 54→30, 73→70, 75→67, 83→46, 96→63, 99→82 -->
+      <svg class="board-svg" viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+
+        <!-- ══ LADDERS (gold two-rail with rungs) ══
+             Cell centres: col = position in row, gridRow = row from top.
+             svgX=(col+0.5)*10, svgY=(gridRow+0.5)*10
+             Ladders: 2→23, 10→30, 28→48, 59→78, 74→88            -->
+
+        <!-- 2(15,95) → 23(25,75): diagonal -->
+        <g stroke="#ca8a04" stroke-linecap="round" fill="none">
+          <line x1="13.6" y1="94.1" x2="23.6" y2="74.1" stroke-width="1.4"/>
+          <line x1="16.4" y1="95.9" x2="26.4" y2="75.9" stroke-width="1.4"/>
+          <line x1="14.9" y1="90.5" x2="17.3" y2="91.8" stroke-width="1.1"/>
+          <line x1="17.5" y1="85.1" x2="19.9" y2="86.4" stroke-width="1.1"/>
+          <line x1="20.1" y1="79.7" x2="22.5" y2="81.0" stroke-width="1.1"/>
+          <line x1="22.7" y1="74.3" x2="25.1" y2="75.6" stroke-width="1.1"/>
+        </g>
+
+        <!-- 10(95,95) → 30(95,75): vertical -->
+        <g stroke="#ca8a04" stroke-linecap="round" fill="none">
+          <line x1="93.5" y1="95" x2="93.5" y2="75" stroke-width="1.4"/>
+          <line x1="96.5" y1="95" x2="96.5" y2="75" stroke-width="1.4"/>
+          <line x1="93.5" y1="90" x2="96.5" y2="90" stroke-width="1.1"/>
+          <line x1="93.5" y1="85" x2="96.5" y2="85" stroke-width="1.1"/>
+          <line x1="93.5" y1="80" x2="96.5" y2="80" stroke-width="1.1"/>
+          <line x1="93.5" y1="75" x2="96.5" y2="75" stroke-width="1.1"/>
+        </g>
+
+        <!-- 28(75,75) → 48(75,55): vertical -->
+        <g stroke="#ca8a04" stroke-linecap="round" fill="none">
+          <line x1="73.5" y1="75" x2="73.5" y2="55" stroke-width="1.4"/>
+          <line x1="76.5" y1="75" x2="76.5" y2="55" stroke-width="1.4"/>
+          <line x1="73.5" y1="70" x2="76.5" y2="70" stroke-width="1.1"/>
+          <line x1="73.5" y1="65" x2="76.5" y2="65" stroke-width="1.1"/>
+          <line x1="73.5" y1="60" x2="76.5" y2="60" stroke-width="1.1"/>
+          <line x1="73.5" y1="55" x2="76.5" y2="55" stroke-width="1.1"/>
+        </g>
+
+        <!-- 59(15,45) → 78(25,25): diagonal -->
+        <g stroke="#ca8a04" stroke-linecap="round" fill="none">
+          <line x1="13.6" y1="44.1" x2="23.6" y2="24.1" stroke-width="1.4"/>
+          <line x1="16.4" y1="45.9" x2="26.4" y2="25.9" stroke-width="1.4"/>
+          <line x1="14.9" y1="40.5" x2="17.3" y2="41.8" stroke-width="1.1"/>
+          <line x1="17.5" y1="35.1" x2="19.9" y2="36.4" stroke-width="1.1"/>
+          <line x1="20.1" y1="29.7" x2="22.5" y2="31.0" stroke-width="1.1"/>
+          <line x1="22.7" y1="24.3" x2="25.1" y2="25.6" stroke-width="1.1"/>
+        </g>
+
+        <!-- 74(65,25) → 88(75,15): diagonal -->
+        <g stroke="#ca8a04" stroke-linecap="round" fill="none">
+          <line x1="63.9" y1="24.0" x2="73.9" y2="14.0" stroke-width="1.4"/>
+          <line x1="66.1" y1="26.0" x2="76.1" y2="16.0" stroke-width="1.4"/>
+          <line x1="65.3" y1="21.2" x2="67.7" y2="23.0" stroke-width="1.1"/>
+          <line x1="68.5" y1="17.5" x2="70.9" y2="19.3" stroke-width="1.1"/>
+          <line x1="71.7" y1="13.8" x2="74.1" y2="15.6" stroke-width="1.1"/>
+        </g>
+
+        <!-- Filled gold dots = ladder bottoms (where you start climbing) -->
+        <g fill="#ca8a04">
+          <circle cx="15" cy="95" r="1.8"/>
+          <circle cx="95" cy="95" r="1.8"/>
+          <circle cx="75" cy="75" r="1.8"/>
+          <circle cx="15" cy="45" r="1.8"/>
+          <circle cx="65" cy="25" r="1.8"/>
+        </g>
+        <!-- Hollow gold dots = ladder tops (where you arrive) -->
+        <g fill="none" stroke="#ca8a04" stroke-width="1.1">
+          <circle cx="25" cy="75" r="1.8"/>
+          <circle cx="95" cy="75" r="1.8"/>
+          <circle cx="75" cy="55" r="1.8"/>
+          <circle cx="25" cy="25" r="1.8"/>
+          <circle cx="75" cy="15" r="1.8"/>
+        </g>
+
+        <!-- ══ SNAKES (red bezier curves) ══
+             Filled circle = snake head (where you land and slide down).
+             Small circle = snake tail (where you end up).
+             Snakes: 16→7, 43→38, 54→30, 73→70, 75→67, 83→46, 96→63, 99→82 -->
+
+        <!-- 16(45,85) → 7(65,95) -->
+        <path d="M45,85 C38,79 72,89 65,95"
+              stroke="#dc2626" stroke-width="2.6" stroke-linecap="round" fill="none" opacity="0.88"/>
+        <circle cx="45" cy="85" r="2.4" fill="#991b1b"/>
+        <circle cx="65" cy="95" r="1.2" fill="#dc2626" opacity="0.7"/>
+
+        <!-- 43(25,55) → 38(25,65) -->
+        <path d="M25,55 C20,58 30,62 25,65"
+              stroke="#dc2626" stroke-width="2.6" stroke-linecap="round" fill="none" opacity="0.88"/>
+        <circle cx="25" cy="55" r="2.4" fill="#991b1b"/>
+        <circle cx="25" cy="65" r="1.2" fill="#dc2626" opacity="0.7"/>
+
+        <!-- 54(65,45) → 30(95,75) -->
+        <path d="M65,45 C52,60 98,58 95,75"
+              stroke="#dc2626" stroke-width="2.6" stroke-linecap="round" fill="none" opacity="0.88"/>
+        <circle cx="65" cy="45" r="2.4" fill="#991b1b"/>
+        <circle cx="95" cy="75" r="1.2" fill="#dc2626" opacity="0.7"/>
+
+        <!-- 73(75,25) → 70(95,35) -->
+        <path d="M75,25 C70,27 99,27 95,35"
+              stroke="#dc2626" stroke-width="2.6" stroke-linecap="round" fill="none" opacity="0.88"/>
+        <circle cx="75" cy="25" r="2.4" fill="#991b1b"/>
+        <circle cx="95" cy="35" r="1.2" fill="#dc2626" opacity="0.7"/>
+
+        <!-- 75(55,25) → 67(65,35) -->
+        <path d="M55,25 C50,27 70,27 65,35"
+              stroke="#dc2626" stroke-width="2.6" stroke-linecap="round" fill="none" opacity="0.88"/>
+        <circle cx="55" cy="25" r="2.4" fill="#991b1b"/>
+        <circle cx="65" cy="35" r="1.2" fill="#dc2626" opacity="0.7"/>
+
+        <!-- 83(25,15) → 46(55,55) -->
+        <path d="M25,15 C10,30 70,38 55,55"
+              stroke="#dc2626" stroke-width="2.6" stroke-linecap="round" fill="none" opacity="0.88"/>
+        <circle cx="25" cy="15" r="2.4" fill="#991b1b"/>
+        <circle cx="55" cy="55" r="1.2" fill="#dc2626" opacity="0.7"/>
+
+        <!-- 96(45,5) → 63(25,35) -->
+        <path d="M45,5 C62,14 8,22 25,35"
+              stroke="#dc2626" stroke-width="2.6" stroke-linecap="round" fill="none" opacity="0.88"/>
+        <circle cx="45" cy="5" r="2.4" fill="#991b1b"/>
+        <circle cx="25" cy="35" r="1.2" fill="#dc2626" opacity="0.7"/>
+
+        <!-- 99(15,5) → 82(15,15) -->
+        <path d="M15,5 C9,8 21,12 15,15"
+              stroke="#dc2626" stroke-width="2.6" stroke-linecap="round" fill="none" opacity="0.88"/>
+        <circle cx="15" cy="5" r="2.4" fill="#991b1b"/>
+        <circle cx="15" cy="15" r="1.2" fill="#dc2626" opacity="0.7"/>
+
+      </svg>
 
       <audio id="ladder"><source src="ladder.wav"></audio>
       <audio id="snake"><source src="snake.wav"></audio>
       <audio id="winner"><source src="winner.wav"></audio>
 
-      <div class="row-odd">
-        <div class="row-9 odd" id="cell-91">91</div>
-        <div class="row-9 even" id="cell-92">92</div>
-        <div class="row-9 odd" id="cell-93">93</div>
-        <div class="row-9 even" id="cell-94">94</div>
-        <div class="row-9 odd" id="cell-95">95</div>
-        <div class="row-9 even" id="cell-96">96</div>
-        <div class="row-9 odd" id="cell-97">97</div>
-        <div class="row-9 even" id="cell-98">98</div>
-        <div class="row-9 odd" id="cell-99">99</div>
-        <div class="row-9 even" id="cell-100">F</div>
-      </div>
+      <!-- Row 10 (top): cells 100–91 -->
+      <div class="cell even  cell-finish" id="cell-100">100</div>
+      <div class="cell odd  snake-head"   id="cell-99">99</div>
+      <div class="cell even"              id="cell-98">98</div>
+      <div class="cell odd"               id="cell-97">97</div>
+      <div class="cell even snake-head"   id="cell-96">96</div>
+      <div class="cell odd"               id="cell-95">95</div>
+      <div class="cell even"              id="cell-94">94</div>
+      <div class="cell odd"               id="cell-93">93</div>
+      <div class="cell even"              id="cell-92">92</div>
+      <div class="cell odd"               id="cell-91">91</div>
 
-      <div class="row-even">
-        <div class="row-8 odd" id="cell-81">81</div>
-        <div class="row-8 even" id="cell-82">82</div>
-        <div class="row-8 odd" id="cell-83">83</div>
-        <div class="row-8 even" id="cell-84">84</div>
-        <div class="row-8 odd" id="cell-85">85</div>
-        <div class="row-8 even" id="cell-86">86</div>
-        <div class="row-8 odd" id="cell-87">87</div>
-        <div class="row-8 even" id="cell-88">88</div>
-        <div class="row-8 odd" id="cell-89">89</div>
-        <div class="row-8 even" id="cell-90">90</div>
-      </div>
+      <!-- Row 9: cells 81–90 -->
+      <div class="cell odd"               id="cell-81">81</div>
+      <div class="cell even"              id="cell-82">82</div>
+      <div class="cell odd  snake-head"   id="cell-83">83</div>
+      <div class="cell even"              id="cell-84">84</div>
+      <div class="cell odd"               id="cell-85">85</div>
+      <div class="cell even"              id="cell-86">86</div>
+      <div class="cell odd"               id="cell-87">87</div>
+      <div class="cell even"              id="cell-88">88</div>
+      <div class="cell odd"               id="cell-89">89</div>
+      <div class="cell even"              id="cell-90">90</div>
 
-      <div class="row-odd">
-        <div class="row-7 odd" id="cell-71">71</div>
-        <div class="row-7 even" id="cell-72">72</div>
-        <div class="row-7 odd" id="cell-73">73</div>
-        <div class="row-7 even" id="cell-74">74</div>
-        <div class="row-7 odd" id="cell-75">75</div>
-        <div class="row-7 even" id="cell-76">76</div>
-        <div class="row-7 odd" id="cell-77">77</div>
-        <div class="row-7 even" id="cell-78">78</div>
-        <div class="row-7 odd" id="cell-79">79</div>
-        <div class="row-7 even" id="cell-80">80</div>
-      </div>
+      <!-- Row 8: cells 80–71 -->
+      <div class="cell even"              id="cell-80">80</div>
+      <div class="cell odd"               id="cell-79">79</div>
+      <div class="cell even"              id="cell-78">78</div>
+      <div class="cell odd"               id="cell-77">77</div>
+      <div class="cell even"              id="cell-76">76</div>
+      <div class="cell odd  snake-head"   id="cell-75">75</div>
+      <div class="cell even ladder-bottom" id="cell-74">74</div>
+      <div class="cell odd  snake-head"   id="cell-73">73</div>
+      <div class="cell even"              id="cell-72">72</div>
+      <div class="cell odd"               id="cell-71">71</div>
 
-      <div class="row-even">
-        <div class="row-6 odd" id="cell-61">61</div>
-        <div class="row-6 even" id="cell-62">62</div>
-        <div class="row-6 odd" id="cell-63">63</div>
-        <div class="row-6 even" id="cell-64">64</div>
-        <div class="row-6 odd" id="cell-65">65</div>
-        <div class="row-6 even" id="cell-66">66</div>
-        <div class="row-6 odd" id="cell-67">67</div>
-        <div class="row-6 even" id="cell-68">68</div>
-        <div class="row-6 odd" id="cell-69">69</div>
-        <div class="row-6 even" id="cell-70">70</div>
-      </div>
+      <!-- Row 7: cells 61–70 -->
+      <div class="cell odd"               id="cell-61">61</div>
+      <div class="cell even"              id="cell-62">62</div>
+      <div class="cell odd"               id="cell-63">63</div>
+      <div class="cell even"              id="cell-64">64</div>
+      <div class="cell odd"               id="cell-65">65</div>
+      <div class="cell even"              id="cell-66">66</div>
+      <div class="cell odd"               id="cell-67">67</div>
+      <div class="cell even"              id="cell-68">68</div>
+      <div class="cell odd"               id="cell-69">69</div>
+      <div class="cell even"              id="cell-70">70</div>
 
-      <div class="row-odd">
-        <div class="row-5 odd" id="cell-51">51</div>
-        <div class="row-5 even" id="cell-52">52</div>
-        <div class="row-5 odd" id="cell-53">53</div>
-        <div class="row-5 even" id="cell-54">54</div>
-        <div class="row-5 odd" id="cell-55">55</div>
-        <div class="row-5 even" id="cell-56">56</div>
-        <div class="row-5 odd" id="cell-57">57</div>
-        <div class="row-5 even" id="cell-58">58</div>
-        <div class="row-5 odd" id="cell-59">59</div>
-        <div class="row-5 even" id="cell-60">60</div>
-      </div>
+      <!-- Row 6: cells 60–51 -->
+      <div class="cell even"              id="cell-60">60</div>
+      <div class="cell odd  ladder-bottom" id="cell-59">59</div>
+      <div class="cell even"              id="cell-58">58</div>
+      <div class="cell odd"               id="cell-57">57</div>
+      <div class="cell even"              id="cell-56">56</div>
+      <div class="cell odd"               id="cell-55">55</div>
+      <div class="cell even snake-head"   id="cell-54">54</div>
+      <div class="cell odd"               id="cell-53">53</div>
+      <div class="cell even"              id="cell-52">52</div>
+      <div class="cell odd"               id="cell-51">51</div>
 
-      <div class="row-even">
-        <div class="row-4 odd" id="cell-41">41</div>
-        <div class="row-4 even" id="cell-42">42</div>
-        <div class="row-4 odd" id="cell-43">43</div>
-        <div class="row-4 even" id="cell-44">44</div>
-        <div class="row-4 odd" id="cell-45">45</div>
-        <div class="row-4 even" id="cell-46">46</div>
-        <div class="row-4 odd" id="cell-47">47</div>
-        <div class="row-4 even" id="cell-48">48</div>
-        <div class="row-4 odd" id="cell-49">49</div>
-        <div class="row-4 even" id="cell-50">50</div>
-      </div>
+      <!-- Row 5: cells 41–50 -->
+      <div class="cell odd"               id="cell-41">41</div>
+      <div class="cell even"              id="cell-42">42</div>
+      <div class="cell odd  snake-head"   id="cell-43">43</div>
+      <div class="cell even"              id="cell-44">44</div>
+      <div class="cell odd"               id="cell-45">45</div>
+      <div class="cell even"              id="cell-46">46</div>
+      <div class="cell odd"               id="cell-47">47</div>
+      <div class="cell even"              id="cell-48">48</div>
+      <div class="cell odd"               id="cell-49">49</div>
+      <div class="cell even"              id="cell-50">50</div>
 
-      <div class="row-odd">
-        <div class="row-3 odd" id="cell-31">31</div>
-        <div class="row-3 even" id="cell-32">32</div>
-        <div class="row-3 odd" id="cell-33">33</div>
-        <div class="row-3 even" id="cell-34">34</div>
-        <div class="row-3 odd" id="cell-35">35</div>
-        <div class="row-3 even" id="cell-36">36</div>
-        <div class="row-3 odd" id="cell-37">37</div>
-        <div class="row-3 even" id="cell-38">38</div>
-        <div class="row-3 odd" id="cell-39">39</div>
-        <div class="row-3 even" id="cell-40">40</div>
-      </div>
+      <!-- Row 4: cells 40–31 -->
+      <div class="cell even"              id="cell-40">40</div>
+      <div class="cell odd"               id="cell-39">39</div>
+      <div class="cell even"              id="cell-38">38</div>
+      <div class="cell odd"               id="cell-37">37</div>
+      <div class="cell even"              id="cell-36">36</div>
+      <div class="cell odd"               id="cell-35">35</div>
+      <div class="cell even"              id="cell-34">34</div>
+      <div class="cell odd"               id="cell-33">33</div>
+      <div class="cell even"              id="cell-32">32</div>
+      <div class="cell odd"               id="cell-31">31</div>
 
-      <div class="row-even">
-        <div class="row-2 odd" id="cell-21">21</div>
-        <div class="row-2 even" id="cell-22">22</div>
-        <div class="row-2 odd" id="cell-23">23</div>
-        <div class="row-2 even" id="cell-24">24</div>
-        <div class="row-2 odd" id="cell-25">25</div>
-        <div class="row-2 even" id="cell-26">26</div>
-        <div class="row-2 odd" id="cell-27">27</div>
-        <div class="row-2 even" id="cell-28">28</div>
-        <div class="row-2 odd" id="cell-29">29</div>
-        <div class="row-2 even" id="cell-30">30</div>
-      </div>
+      <!-- Row 3: cells 21–30 -->
+      <div class="cell odd"               id="cell-21">21</div>
+      <div class="cell even"              id="cell-22">22</div>
+      <div class="cell odd"               id="cell-23">23</div>
+      <div class="cell even"              id="cell-24">24</div>
+      <div class="cell odd"               id="cell-25">25</div>
+      <div class="cell even"              id="cell-26">26</div>
+      <div class="cell odd"               id="cell-27">27</div>
+      <div class="cell even ladder-bottom" id="cell-28">28</div>
+      <div class="cell odd"               id="cell-29">29</div>
+      <div class="cell even"              id="cell-30">30</div>
 
-      <div class="row-odd">
-        <div class="row-1 odd" id="cell-11">11</div>
-        <div class="row-1 even" id="cell-12">12</div>
-        <div class="row-1 odd" id="cell-13">13</div>
-        <div class="row-1 even" id="cell-14">14</div>
-        <div class="row-1 odd" id="cell-15">15</div>
-        <div class="row-1 even" id="cell-16">16</div>
-        <div class="row-1 odd" id="cell-17">17</div>
-        <div class="row-1 even" id="cell-18">18</div>
-        <div class="row-1 odd" id="cell-19">19</div>
-        <div class="row-1 even" id="cell-20">20</div>
-      </div>
+      <!-- Row 2: cells 20–11 -->
+      <div class="cell even"              id="cell-20">20</div>
+      <div class="cell odd"               id="cell-19">19</div>
+      <div class="cell even"              id="cell-18">18</div>
+      <div class="cell odd"               id="cell-17">17</div>
+      <div class="cell even snake-head"   id="cell-16">16</div>
+      <div class="cell odd"               id="cell-15">15</div>
+      <div class="cell even"              id="cell-14">14</div>
+      <div class="cell odd"               id="cell-13">13</div>
+      <div class="cell even"              id="cell-12">12</div>
+      <div class="cell odd"               id="cell-11">11</div>
 
-      <div class="row-even">
-        <div class="row-0 odd" id="cell-1">S</div>
-        <div class="row-0 even" id="cell-2">2</div>
-        <div class="row-0 odd" id="cell-3">3</div>
-        <div class="row-0 even" id="cell-4">4</div>
-        <div class="row-0 odd" id="cell-5">5</div>
-        <div class="row-0 even" id="cell-6">6</div>
-        <div class="row-0 odd" id="cell-7">7</div>
-        <div class="row-0 even" id="cell-8">8</div>
-        <div class="row-0 odd" id="cell-9">9</div>
-        <div class="row-0 even" id="cell-10">10</div>
-      </div>
+      <!-- Row 1 (bottom): cells 1–10 -->
+      <div class="cell odd  cell-start"   id="cell-1">1</div>
+      <div class="cell even ladder-bottom" id="cell-2">2</div>
+      <div class="cell odd"               id="cell-3">3</div>
+      <div class="cell even"              id="cell-4">4</div>
+      <div class="cell odd"               id="cell-5">5</div>
+      <div class="cell even"              id="cell-6">6</div>
+      <div class="cell odd"               id="cell-7">7</div>
+      <div class="cell even"              id="cell-8">8</div>
+      <div class="cell odd"               id="cell-9">9</div>
+      <div class="cell even ladder-bottom" id="cell-10">10</div>
 
+    </div><!-- .board -->
+  </div><!-- .board-wrapper -->
+
+  <!-- ===== SIDEBAR ===== -->
+  <div class="side-bar">
+
+    <h1>Snakes &amp; Ladders<span>Multiplayer</span></h1>
+
+    <table>
+      <thead>
+        <tr><th colspan="4">Players</th></tr>
+        <tr>
+          <th>Name</th>
+          <th>Score</th>
+          <th>Color</th>
+          <th>Turn</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="player-name"  id="name-0">Player 1</td>
+          <td class="player-score" id="score-0">0</td>
+          <td class="player-color" id="color-0">Blue</td>
+          <td><div class="status-0"></div></td>
+        </tr>
+        <tr>
+          <td class="player-name"  id="name-1">Player 2</td>
+          <td class="player-score" id="score-1">0</td>
+          <td class="player-color" id="color-1">Red</td>
+          <td><div class="status-1"></div></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <hr class="divider">
+
+    <div class="btn-row">
+      <button class="roll-die" id="roll"><img class="die" id="diephoto" src="dice-1.png"></button>
+      <button class="restart-btn" id="restart">Restart</button>
     </div>
 
-    <div class="side-bar">
-
-      <h1>Snakes &amp; Ladders<span>Multiplayer</span></h1>
-
-      <table>
-        <thead>
-          <tr>
-            <th colspan="4">Players</th>
-          </tr>
-          <tr>
-            <th>Name</th>
-            <th>Score</th>
-            <th>Color</th>
-            <th>Turn</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="player-name" id="name-0">Player 1</td>
-            <td class="player-score" id="score-0">0</td>
-            <td class="player-color" id="color-0">Blue</td>
-            <td><div class="status-0"></div></td>
-          </tr>
-          <tr>
-            <td class="player-name" id="name-1">Player 2</td>
-            <td class="player-score" id="score-1">0</td>
-            <td class="player-color" id="color-1">Red</td>
-            <td><div class="status-1"></div></td>
-          </tr>
-        </tbody>
-      </table>
-
-      <hr class="divider">
-
-      <div class="btn-row">
-        <button class="roll-die" id="roll"><img class="die" id="diephoto" src="dice-1.png"></button>
-        <button class="restart-btn" id="restart">Restart</button>
+    <div id="chat">
+      <h2>Live Chat</h2>
+      <div id="chat-window">
+        <div id="output"></div>
+        <div id="feedback"></div>
       </div>
-
-      <div id="chat">
-          <h2>Live Chat</h2>
-          <div id="chat-window">
-              <div id="output"></div>
-              <div id="feedback"></div>
-          </div>
-          <input id="handle" type="text" placeholder="Your name" />
-          <input id="message" type="text" placeholder="Type a message..." />
-          <button id="send">Send</button>
-      </div>
-
+      <input id="handle"  type="text" placeholder="Your name">
+      <input id="message" type="text" placeholder="Type a message...">
+      <button id="send">Send</button>
     </div>
-  </div>
 
-    </body>
-    <script src="/app.js"></script>
+  </div><!-- .side-bar -->
+
+</div><!-- .main -->
+
+<script src="/app.js"></script>
+</body>
 </html>

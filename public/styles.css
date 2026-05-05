@@ -1,9 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
 
 /* ===== Reset & Base ===== */
-*, *::before, *::after {
-    box-sizing: border-box;
-}
+*, *::before, *::after { box-sizing: border-box; }
 
 body {
     font-family: 'Nunito', sans-serif;
@@ -18,111 +16,101 @@ div.main {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    gap: 2em;
+    gap: 1.5em;
     padding: 1.5em;
-    max-width: 1500px;
+    max-width: 1100px;
     margin: 0 auto;
 }
 
-/* ===== Board ===== */
-/*
- * font-size on .board controls everything:
- * cells use 3em → scale with board font-size
- * image left/top/height are in em → also scale
- * Breakpoints only need to change font-size here.
- */
-div.board {
-    position: relative;  /* images positioned relative to board */
-    font-size: 16px;
-    flex-shrink: 0;
+/* ===== Board Wrapper ===== */
+.board-wrapper {
+    flex: 0 0 auto;
+    width: clamp(280px, 56vw, 620px);
     order: 1;
 }
 
-/* Clearfix: board contains floated rows, needs explicit height */
-div.board::after {
-    content: '';
-    display: table;
-    clear: both;
+/* ===== Board Grid ===== */
+.board {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+    position: relative;
+    border: 2px solid #4f46e5;
+    border-radius: 6px;
+    overflow: hidden;
+    container-type: inline-size; /* enables cqi units for font scaling */
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
 }
 
-/* ===== Board Rows ===== */
-div.row-even,
-div.row-odd {
-    margin-left: 2em;
-    float: left;
-}
-
-div.row-0, .row-2, .row-4, .row-6, .row-8 {
-    width: 1.5em;
-    height: 1.5em;
-    float: left;
-    border: 1px solid rgba(0, 0, 0, 0.12);
-    font-size: 3em;
-    text-align: center;
-    line-height: 1.5em;
-    clear: right;
-    font-weight: 800;
-    transition: background-color 0.4s ease;
-}
-
-div.row-1, .row-3, .row-5, .row-7, .row-9 {
-    width: 1.5em;
-    height: 1.5em;
-    float: right;
-    border: 1px solid rgba(0, 0, 0, 0.12);
-    font-size: 3em;
-    text-align: center;
-    line-height: 1.5em;
-    clear: left;
-    font-weight: 800;
-    transition: background-color 0.4s ease;
-}
-
-.odd {
-    color: #78716c;
-    background-color: #fefce8;
-}
-
-.even {
-    color: #15803d;
-    background-color: #dcfce7;
-}
-
-/* ===== Snake & Ladder Images =====
- *
- * All values are in em so they scale with div.board's font-size.
- * Positions are board-relative (board has position: relative).
- * Heights converted from px: px / 16 = em value.
- */
-.img {
+/* ===== SVG Overlay (snakes & ladders) ===== */
+.board-svg {
     position: absolute;
-    transform: translateX(-50%);
-    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.25));
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
 }
 
-/* Snakes */
-.snake8 { left: 7.5em;  top: 2.5em;  height: 4.5em;  }
-.snake7 { left: 20.5em; top: 7.5em;  height: 17.1em; }
-.snake6 { left: 39.5em; top: 11.5em; height: 6.5em;  }
-.snake5 { left: 26.5em; top: 37.5em; height: 9.5em;  }
-.snake4 { left: 28.5em; top: 11.5em; height: 7.9em;  }
-.snake3 { left: 16.5em; top: 2.5em;  height: 14.4em; }
-.snake2 { left: 37.5em; top: 21.5em; height: 14.3em; }
-.snake1 { left: 12.5em; top: 25.5em; height: 5em;    }
+/* ===== Board Cells ===== */
+.cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 2cqi;          /* 2% of board width — scales perfectly */
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    position: relative;
+    transition: background-color 0.35s ease;
+    overflow: hidden;
+    line-height: 1;
+}
 
-/* Ladders */
-.ladder5 { left: 32.5em; top: 4.5em;  height: 10.7em; }
-.ladder4 { left: 10.5em; top: 11.5em; height: 12.8em; }
-.ladder3 { left: 36.5em; top: 25.5em; height: 10em;   }
-.ladder2 { left: 9.5em;  top: 33.5em; height: 13.1em; }
-.ladder1 { left: 45.5em; top: 34.5em; height: 11.8em; }
+.cell.odd  { background-color: #fefce8; color: #78716c; }
+.cell.even { background-color: #dcfce7; color: #15803d; }
+
+/* Special cells */
+.cell.cell-start {
+    background-color: #ede9fe;
+    color: #6d28d9;
+    font-weight: 900;
+}
+
+.cell.cell-finish {
+    background-color: #fef9c3;
+    color: #854d0e;
+    font-weight: 900;
+    font-size: 1.5cqi;
+}
+
+/* Snake head indicator */
+.cell.snake-head::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: #dc2626;
+    border-radius: 0 0 2px 2px;
+}
+
+/* Ladder bottom indicator */
+.cell.ladder-bottom::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: #ca8a04;
+    border-radius: 2px 2px 0 0;
+}
 
 /* ===== Sidebar ===== */
 div.side-bar {
     order: 2;
     flex: 1;
-    min-width: 240px;
-    max-width: 360px;
+    min-width: 220px;
+    max-width: 340px;
     background: #ffffff;
     border-radius: 20px;
     padding: 1.8em 2em;
@@ -160,7 +148,7 @@ table {
     font-size: 0.86em;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
 }
 
 table th {
@@ -182,14 +170,11 @@ table td {
 }
 
 table tr:last-child td { border-bottom: none; }
-
-table tbody tr { background: #ffffff; }
 table tbody tr:nth-child(even) td { background: #f9fafb; }
 
 .player-name  { font-weight: 700; color: #1f2937; }
 .player-score { font-weight: 800; color: #4f46e5; font-size: 1.05em; }
 .player-color { font-weight: 600; }
-
 #color-0 { color: #2563eb; }
 #color-1 { color: #dc2626; }
 
@@ -226,15 +211,22 @@ button {
     -webkit-tap-highlight-color: transparent;
 }
 
+.btn-row {
+    display: flex;
+    gap: 0.6em;
+    align-items: center;
+    margin-bottom: 0;
+}
+
 .roll-die {
+    flex: 1;
     background: linear-gradient(135deg, #4f46e5, #7c3aed);
-    padding: 0.7em;
-    margin-bottom: 0.6em;
+    padding: 0.6em;
     box-shadow: 0 4px 20px rgba(79, 70, 229, 0.45);
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 3.5em;
+    min-height: 3.2em;
 }
 
 .roll-die:hover {
@@ -246,9 +238,11 @@ button {
 .roll-die:active { transform: translateY(0); }
 
 .restart-btn {
+    flex: 0 0 auto;
+    width: auto;
+    padding: 0.6em 1em;
     background: linear-gradient(135deg, #f43f5e, #e11d48);
     color: white;
-    padding: 0.65em;
     line-height: 1.5;
     box-shadow: 0 4px 14px rgba(244, 63, 94, 0.35);
 }
@@ -261,16 +255,13 @@ button {
 
 .restart-btn:active { transform: translateY(0); }
 
-/* ===== Die Image ===== */
 img.die {
-    width: 4em;
+    width: 3.8em;
     filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
     transition: transform 0.15s ease;
 }
 
-.roll-die:hover img.die {
-    transform: rotate(15deg) scale(1.08);
-}
+.roll-die:hover img.die { transform: rotate(15deg) scale(1.08); }
 
 @keyframes rollDie {
     0%   { transform: rotate(0deg)   scale(1);   }
@@ -280,9 +271,7 @@ img.die {
     100% { transform: rotate(360deg) scale(1);   }
 }
 
-img.die.rolling {
-    animation: rollDie 0.5s ease-in-out;
-}
+img.die.rolling { animation: rollDie 0.5s ease-in-out; }
 
 /* ===== Chat ===== */
 #chat {
@@ -306,7 +295,7 @@ h2 {
 }
 
 #chat-window {
-    height: 140px;
+    height: 130px;
     overflow-y: auto;
     background: #fafafa;
     scrollbar-width: thin;
@@ -317,7 +306,7 @@ h2 {
 #chat-window::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
 
 #output p {
-    padding: 0.45em 1em;
+    padding: 0.4em 1em;
     margin: 0;
     border-bottom: 1px solid #f3f4f6;
     color: #374151;
@@ -330,15 +319,9 @@ h2 {
 #feedback p {
     color: #9ca3af;
     font-size: 0.78em;
-    padding: 0.35em 1em;
+    padding: 0.3em 1em;
     margin: 0;
     font-style: italic;
-}
-
-/* ===== Chat Inputs ===== */
-label {
-    display: block;
-    padding: 6px 10px;
 }
 
 input {
@@ -349,12 +332,10 @@ input {
     display: block;
     width: 100%;
     font-family: 'Nunito', sans-serif;
-    font-size: 0.85em;
+    font-size: 16px;   /* prevents iOS zoom */
     color: #374151;
     outline: none;
     transition: background 0.18s ease;
-    /* prevent zoom on iOS when font-size < 16px */
-    font-size: max(0.85em, 16px);
 }
 
 input:focus { background: #f0f4ff; }
@@ -364,7 +345,7 @@ input::placeholder { color: #c4c9d4; }
     border-radius: 0;
     background: #4f46e5;
     color: white;
-    padding: 0.7em;
+    padding: 0.65em;
     box-shadow: none;
     border-top: 1px solid #4338ca;
     letter-spacing: 0.08em;
@@ -373,36 +354,19 @@ input::placeholder { color: #c4c9d4; }
 
 #send:hover { background: #4338ca; }
 
-/* ==========================================================
-   RESPONSIVE BREAKPOINTS
-   All breakpoints only change div.board's font-size and the
-   flex direction — the internal board layout is untouched.
-   ========================================================== */
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
 
-/* Tablet: slightly smaller board, sidebar stays beside it */
-@media (max-width: 1100px) {
-    div.board { font-size: 12px; }
-
+/* Compact sidebar at medium widths */
+@media (max-width: 900px) {
     div.side-bar {
-        min-width: 220px;
-        max-width: 300px;
-        padding: 1.4em 1.5em;
-    }
-}
-
-/* Small tablet: tighter */
-@media (max-width: 860px) {
-    div.board { font-size: 9px; }
-
-    div.main { gap: 1.2em; padding: 1em; }
-
-    div.side-bar {
-        min-width: 190px;
+        min-width: 180px;
         max-width: 260px;
         padding: 1.2em 1.2em;
     }
-
-    h1 { font-size: 1.1em; }
+    .board-wrapper { width: clamp(260px, 58vw, 560px); }
+    h1 { font-size: 1.05em; }
     table { font-size: 0.78em; }
 }
 
@@ -412,65 +376,30 @@ input::placeholder { color: #c4c9d4; }
         flex-direction: column;
         align-items: center;
         padding: 0.8em;
-        gap: 1em;
+        gap: 0.9em;
+    }
+
+    .board-wrapper {
+        width: min(96vw, 460px);
+        order: 2;
     }
 
     div.side-bar {
-        order: 1;            /* sidebar on top */
+        order: 1;
         width: 100%;
         max-width: 100%;
         min-width: unset;
-        border-radius: 16px;
-        padding: 1.2em 1.2em 1em;
-        position: static;    /* no sticky on mobile */
+        border-radius: 14px;
+        padding: 1em 1.2em;
+        position: static;
     }
 
-    div.board {
-        order: 2;            /* board below sidebar */
-        font-size: 6.5px;
-    }
-
-    /* Mobile sidebar: player cards side by side */
-    .players-row {
-        display: flex;
-        gap: 0.8em;
-        margin-bottom: 1em;
-    }
-
-    .player-card {
-        flex: 1;
-        background: #f8fafc;
-        border-radius: 10px;
-        padding: 0.7em 0.6em;
-        text-align: center;
-        border: 1px solid #e5e7eb;
-    }
-
-    /* Roll + Restart side by side on mobile */
-    .btn-row {
-        display: flex;
-        gap: 0.6em;
-        align-items: center;
-    }
-
-    .roll-die   { margin-bottom: 0; flex: 1; }
-    .restart-btn { flex: 0 0 auto; width: auto; padding: 0.65em 1em; }
-
-    /* Compact table on mobile */
-    table { font-size: 0.82em; margin-bottom: 0.8em; }
-
-    h1 { font-size: 1.1em; margin-bottom: 0.9em; }
-
-    img.die { width: 3.2em; }
-
-    /* Taller chat window uses more available height on mobile */
-    #chat-window { height: 120px; }
-
-    input { font-size: 16px; } /* prevent iOS zoom */
+    h1 { font-size: 1.1em; margin-bottom: 0.8em; }
+    img.die { width: 3em; }
+    #chat-window { height: 100px; }
 }
 
-/* Very small phones */
 @media (max-width: 380px) {
-    div.board { font-size: 5.8px; }
-    div.main  { padding: 0.6em; }
+    .board-wrapper { width: 96vw; }
+    div.main { padding: 0.5em; }
 }
